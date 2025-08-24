@@ -247,6 +247,8 @@ async function tick(bot) {
 
 setInterval(() => tick(bot), 15_000);
 
+bot.init();
+
 // Choose between Webhook or Polling
 if (process.env.USE_WEBHOOK === 'true') {
   // Webhook mode
