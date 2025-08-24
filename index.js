@@ -258,7 +258,7 @@ if (process.env.USE_WEBHOOK === 'true') {
 
   app.listen(process.env.PORT, async () => {
     console.log(`Server running on port ${process.env.PORT}`);
-    await bot.api.setWebhook(`${process.env.WEBHOOK_URL}`);
+    await bot.api.setWebhook(process.env.WEBHOOK_URL);
   });
 } else {
   // Polling mode
