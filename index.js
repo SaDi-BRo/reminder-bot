@@ -225,8 +225,6 @@ async function tick(bot) {
 
 setInterval(() => tick(bot), 15_000);
 
-bot.init();
-
 // Choose between Webhook or Polling
 if (process.env.ENVIRONMENT === 'development') {
   bot.start({
