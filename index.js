@@ -240,6 +240,6 @@ if (process.env.ENVIRONMENT === 'production') {
   }
   app.listen(3000, async () => {
     console.log('Server is running on port 3000');
-    await bot.api.setWebhook('https://simple-game-bot.onrender.com/webhook');
+    await bot.api.setWebhook(process.env.WEBHOOK_URL);
   });
 }
