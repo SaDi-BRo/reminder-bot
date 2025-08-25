@@ -1,25 +1,3 @@
-/**
- * Telegram Reminder Bot (grammY JS)
- * ---------------------------------
- * Single-file bot using long polling + a tiny JSON file DB.
- *
- * Quick setup:
- * 1) npm init -y
- * 2) npm i grammy dotenv
- * 3) Create .env with: BOT_TOKEN=123456:ABC-Your-Telegram-Bot-Token
- * 4) node index.js
- *
- * Optional package.json snippet:
- * {
- *   "name": "grammy-reminder-bot",
- *   "version": "1.0.0",
- *   "main": "index.js",
- *   "type": "commonjs",
- *   "scripts": { "start": "node index.js" },
- *   "dependencies": { "dotenv": "^16.4.5", "grammy": "^1.28.1" }
- * }
- */
-
 const { Bot } = require('grammy');
 const express = require('express');
 require('dotenv').config();
@@ -250,19 +228,18 @@ setInterval(() => tick(bot), 15_000);
 bot.init();
 
 // Choose between Webhook or Polling
-if (process.env.USE_WEBHOOK === 'true') {
-  // Webhook mode
-  app.post('/webhook', (req, res) => {
-    bot.handleUpdate(req.body, res);
-  });
-
-  app.listen(process.env.PORT, async () => {
-    console.log(`Server running on port ${process.env.PORT}`);
-    await bot.api.setWebhook(process.env.WEBHOOK_URL);
-  });
-} else {
-  // Polling mode
+if (process.env.ENVIRONMENT === 'development') {
   bot.start({
     onStart: info => console.log(`🤖 @${info.username} is running…`),
+  });
+}
+
+if (process.env.ENVIRONMENT === 'production') {
+  if (!process.env.WEBHOOK_URL) {
+    throw new Error('WEBHOOK_URL is not defined in the environment variables');
+  }
+  app.listen(3000, async () => {
+    console.log('Server is running on port 3000');
+    await bot.api.setWebhook('https://simple-game-bot.onrender.com/webhook');
   });
 }
