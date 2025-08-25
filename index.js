@@ -83,6 +83,7 @@ function parseWhenAndText(input) {
 const app = express();
 const bot = new Bot(TOKEN);
 
+bot.init();
 // Middleware for Express to parse JSON
 app.use(express.json());
 
