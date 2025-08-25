@@ -225,19 +225,11 @@ async function tick(bot) {
 
 setInterval(() => tick(bot), 15_000);
 
-// Choose between Webhook or Polling
-if (process.env.ENVIRONMENT === 'development') {
-  bot.start({
-    onStart: info => console.log(`🤖 @${info.username} is running…`),
-  });
-}
+app.post('/webhook', (req, res) => {
+  bot.handleUpdate(req.body, res);
+});
 
-if (process.env.ENVIRONMENT === 'production') {
-  if (!process.env.WEBHOOK_URL) {
-    throw new Error('WEBHOOK_URL is not defined in the environment variables');
-  }
-  app.listen(3000, async () => {
-    console.log('Server is running on port 3000');
-    await bot.api.setWebhook(process.env.WEBHOOK_URL);
-  });
-}
+app.listen(3000, async () => {
+  console.log('Server is running on port 3000');
+  await bot.api.setWebhook(process.env.WEBHOOK_URL);
+});
