@@ -86,6 +86,10 @@ const bot = new Bot(TOKEN);
 // Middleware for Express to parse JSON
 app.use(express.json());
 
+app.post('/webhook', (req, res) => {
+  bot.handleUpdate(req.body, res);
+});
+
 bot.api.setMyCommands([
   { command: 'start', description: 'Start the bot' },
   { command: 'help', description: 'How to use the bot' },
@@ -225,11 +229,7 @@ async function tick(bot) {
 
 setInterval(() => tick(bot), 15_000);
 
-app.post('/webhook', (req, res) => {
-  bot.handleUpdate(req.body, res);
-});
-
 app.listen(3000, async () => {
   console.log('Server is running on port 3000');
-  await bot.api.setWebhook(process.env.WEBHOOK_URL);
+  await bot.api.setWebhook(process.env.WEBHOOK_URL + '/webhook');
 });
